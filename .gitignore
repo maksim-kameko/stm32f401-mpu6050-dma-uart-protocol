@@ -1,0 +1,28 @@
+# Build output folders
+Debug/
+Release/
+
+# If you ever use other build dirs
+build/
+cmake-build-*/
+
+# STM32CubeIDE / Eclipse workspace settings
+.settings/
+*.launch
+
+# STM32CubeMX metadata
+.mxproject
+
+# Generated binaries / artifacts (sometimes end up in project root or elsewhere)
+*.o
+*.d
+*.su
+*.elf
+*.hex
+*.bin
+*.map
+*.list
+
+# Optional: local OS/editor noise
+.DS_Store
+Thumbs.db
