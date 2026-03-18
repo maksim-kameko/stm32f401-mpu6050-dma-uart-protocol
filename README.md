@@ -45,22 +45,43 @@ Reliable UART communication protocol designed from scratch:
 
 ```mermaid
 graph LR
+
+    %% ===== MCU =====
     subgraph MCU ["STM32F401RE"]
-        A[I2C + DMA] --> B[Processing Buffer]
-        B --> C[State Machine Parser]
-        C --> D[UART + DMA]
+        
+        subgraph ACQ ["Data Acquisition"]
+            A[I2C + DMA<br/>Sensor Read]
+        end
+        
+        subgraph PROC ["Data Processing"]
+            B[Ring Buffer]
+            C[State Machine<br/>Parser]
+        end
+        
+        subgraph TX ["Transmission"]
+            D[UART + DMA<br/>Binary Protocol]
+        end
+
+        A --> B --> C --> D
     end
 
-    subgraph External
-        S((MPU6050 Sensor)) -- Raw Data --> A
-        D -- Binary Stream --> P((PC / Serial Monitor))
+    %% ===== External =====
+    subgraph EXT ["External Devices"]
+        S((MPU6050))
+        P((PC / Serial Monitor))
     end
 
+    %% ===== Connections =====
+    S -- "Raw IMU Data" --> A
+    D -- "Framed Binary Stream (CRC)" --> P
+
+    %% ===== Styles =====
     style MCU fill:#f4f6f7,stroke:#2c3e50,stroke-width:2px
-    style A fill:#d6eaf8,stroke:#2c3e50
-    style B fill:#ebf5fb,stroke:#2c3e50
-    style C fill:#d4efdf,stroke:#2c3e50
-    style D fill:#d6eaf8,stroke:#2c3e50
+
+    style ACQ fill:#d6eaf8,stroke:#2c3e50
+    style PROC fill:#d5f5e3,stroke:#2c3e50
+    style TX fill:#fdebd0,stroke:#2c3e50
+
     style S fill:#f9e79f,stroke:#2c3e50
     style P fill:#aed6f1,stroke:#2c3e50
 ```
